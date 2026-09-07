@@ -9,6 +9,13 @@ pipeline {
             }
         }
 
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing Python dependencies...'
+                sh 'pip3 install -r requirements.txt'
+            }
+        }
+
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
