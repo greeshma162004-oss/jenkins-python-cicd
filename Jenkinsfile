@@ -85,16 +85,27 @@ stage('Docker Push') {
         }
     }
 }
-        stage('Deploy to DEV') {
-            when {
-                expression {
-                    params.ENVIRONMENT == 'DEV'
-                }
-            }
-            steps {
-                echo 'Deploying application to DEV...'
-            }
+ stage('Deploy to DEV') {
+    when {
+        expression {
+            params.ENVIRONMENT == 'DEV'
         }
+    }
+    steps {
+        echo 'Deploying application to DEV...'
+
+        sh '''
+            docker stop jenkins-python-cicd-dev || true
+            docker rm jenkins-python-cicd-dev || true
+
+            docker run -d \
+                --name jenkins-python-cicd-dev \
+                jenkins-python-cicd:latest
+        '''
+
+        echo 'DEV deployment completed!'
+    }
+}       
 
         stage('Deploy to TEST') {
             when {
