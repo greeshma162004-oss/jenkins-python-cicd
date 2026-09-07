@@ -11,15 +11,18 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                echo 'Creating Python virtual environment...'
+                sh 'python3 -m venv venv'
+
                 echo 'Installing Python dependencies...'
-                sh 'pip3 install -r requirements.txt'
+                sh 'venv/bin/pip install -r requirements.txt'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
-                sh 'pytest'
+                sh 'venv/bin/pytest'
             }
         }
     }
