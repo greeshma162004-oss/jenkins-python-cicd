@@ -58,6 +58,13 @@ pipeline {
         }
     }
 }
+
+stage('Docker Build') {
+    steps {
+        echo 'Building Docker image...'
+        sh 'docker build -t jenkins-python-cicd:latest .'
+    }
+}
         stage('Deploy to DEV') {
             when {
                 expression {
