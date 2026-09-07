@@ -1,11 +1,25 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['DEV', 'TEST', 'PROD'],
+            description: 'Select the deployment environment'
+        )
+    }
+
     stages {
 
         stage('Build') {
             steps {
                 echo 'Building the Python application...'
+            }
+        }
+
+        stage('Show Environment') {
+            steps {
+                echo "Selected environment: ${params.ENVIRONMENT}"
             }
         }
 
