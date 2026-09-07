@@ -65,6 +65,26 @@ stage('Docker Build') {
         sh 'docker build -t jenkins-python-cicd:latest .'
     }
 }
+stage('Docker Push') {
+    steps {
+        echo 'Logging in to Docker Hub...'
+
+        withCredentials([
+            usernamePassword(
+                credentialsId: 'dockerhub-creds',
+                usernameVariable: 'DOCKER_USERNAME',
+                passwordVariable: 'DOCKER_PASSWORD'
+            )
+        ]) {
+            sh '''
+                echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                docker tag jenkins-python-cicd:latest $DOCKER_USERNAME/jenkins-python-cicd:latest
+                docker push $DOCKER_USERNAME/jenkins-python-cicd:latest
+                docker logout
+            '''
+        }
+    }
+}
         stage('Deploy to DEV') {
             when {
                 expression {
