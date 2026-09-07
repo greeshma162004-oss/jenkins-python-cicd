@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        APP_NAME = 'jenkins-python-cicd'
+        VERSION = '1.0'
+    }
+
     parameters {
         choice(
             name: 'ENVIRONMENT',
@@ -19,8 +24,10 @@ pipeline {
 
         stage('Show Environment') {
             steps {
+                echo "Application: ${env.APP_NAME}"
+                echo "Version: ${env.VERSION}"
                 echo "Selected environment: ${params.ENVIRONMENT}"
-            }
+           }
         }
 
         stage('Install Dependencies') {
@@ -33,13 +40,24 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Tests') {
+            parallel {
+
+                stage('Unit Tests') {
+                    steps {
+                        echo 'Running unit tests...'
+                        sh 'venv/bin/pytest'
+                    }
+                }
+
+        stage('Application Check') {
             steps {
-                echo 'Running automated tests...'
-                sh 'venv/bin/pytest'
+                echo 'Checking application...'
+                sh 'venv/bin/python app.py'
             }
         }
-
+    }
+}
         stage('Deploy to DEV') {
             when {
                 expression {
