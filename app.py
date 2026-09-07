@@ -3,7 +3,7 @@ from flask import Flask
 app = Flask(__name__)
 
 def greet():
-    return "Hello from Jenkins webhook CI/CD!"
+    return "Hello from Jenkins webhook CI/CD"
 
 @app.route("/")
 def home():
