@@ -39,6 +39,39 @@ pipeline {
                 sh 'venv/bin/pytest'
             }
         }
+
+        stage('Deploy to DEV') {
+            when {
+                expression {
+                    params.ENVIRONMENT == 'DEV'
+                }
+            }
+            steps {
+                echo 'Deploying application to DEV...'
+            }
+        }
+
+        stage('Deploy to TEST') {
+            when {
+                expression {
+                    params.ENVIRONMENT == 'TEST'
+                }
+            }
+            steps {
+                echo 'Deploying application to TEST...'
+            }
+        }
+
+        stage('Deploy to PROD') {
+            when {
+                expression {
+                    params.ENVIRONMENT == 'PROD'
+                }
+            }
+            steps {
+                echo 'Deploying application to PROD...'
+            }
+        }
     }
 
     post {
