@@ -100,6 +100,7 @@ stage('Docker Push') {
 
             docker run -d \
                 --name jenkins-python-cicd-dev \
+                -p 5000:5000 \
                 jenkins-python-cicd:latest
         '''
 
